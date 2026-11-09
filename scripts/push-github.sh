@@ -17,11 +17,17 @@ else
   git remote add github "https://github.com/${REPO}.git"
 fi
 
-for remote in github origin; do
-  if git remote get-url "$remote" >/dev/null 2>&1; then
-    git push -u "$remote" main develop release
-    git push "$remote" --tags || true
-  fi
-done
+if git remote get-url github >/dev/null 2>&1; then
+  git push -u github main develop release
+  git push github --tags || true
+elif [[ -n "${GH_TOKEN:-}" ]]; then
+  git remote remove github 2>/dev/null || true
+  git remote add github "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git"
+  git push -u github main develop release
+  git push github --tags || true
+else
+  echo "No github remote and no GH_TOKEN; configure deploy key or GH_TOKEN." >&2
+  exit 1
+fi
 
 echo "GitHub: https://github.com/${REPO}"
