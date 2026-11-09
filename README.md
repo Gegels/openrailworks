@@ -1,5 +1,7 @@
 # OpenRailWorks
 
+**GitHub monorepo** — all crates and docs in one repository ([layout](docs/MONOREPO.md), [GitHub setup](docs/GITHUB.md)).
+
 Independent, open-source reimplementation of the **Train Simulator Classic** (RailWorks) runtime — inspired by [openOMSI](https://openomsi.org/). Your purchased routes, rolling stock, and scenarios stay on disk in the original installation; **this project ships no game content**.
 
 > **Requires Train Simulator Classic.** Point OpenRailWorks at your existing RailWorks folder (Steam). The installation directory is never modified.

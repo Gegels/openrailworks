@@ -8,8 +8,8 @@ version = "0.0.1"
 edition = "2021"
 license = "AGPL-3.0-only"
 rust-version = "1.75"
-repository = ""
-homepage = ""
+repository = "https://github.com/suchanek/openrailworks"
+homepage = "https://github.com/suchanek/openrailworks"
 
 [workspace.dependencies]
 anyhow = "1.0"
