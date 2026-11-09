@@ -17,7 +17,11 @@ else
   git remote add github "https://github.com/${REPO}.git"
 fi
 
-git push -u github main
-git push github --tags
+for remote in github origin; do
+  if git remote get-url "$remote" >/dev/null 2>&1; then
+    git push -u "$remote" main
+    git push "$remote" --tags || true
+  fi
+done
 
 echo "GitHub: https://github.com/${REPO}"

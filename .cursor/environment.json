@@ -1,0 +1,3 @@
+{
+  "install": "curl -fsSL https://sh.rustup.rs | sh -s -- -y --default-toolchain stable && . \"$HOME/.cargo/env\" && cargo test --workspace"
+}
