@@ -19,7 +19,7 @@ fi
 
 for remote in github origin; do
   if git remote get-url "$remote" >/dev/null 2>&1; then
-    git push -u "$remote" main
+    git push -u "$remote" main develop release
     git push "$remote" --tags || true
   fi
 done
