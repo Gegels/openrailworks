@@ -1,22 +1,53 @@
 # Erster Push nach GitHub (Windows)
 
-## Fehler: `fatal: not a git repository`
+## Häufige Fehler
 
-`git` muss in einem Ordner laufen, in dem bereits ein **`.git`** Verzeichnis existiert (Clone oder `git init`).  
-`C:\Users\georg` ist **kein** Projektordner.
+| Meldung | Ursache | Lösung |
+|---------|---------|--------|
+| `fatal: not a git repository` | `git` in `C:\Users\georg` oder `System32` | Erst in einen **Clone-Ordner** wechseln (mit `.git`) |
+| `Die Syntax für den Dateinamen … ist falsch` | Alle Befehle **in einer Zeile** ohne Leerzeichen | **Ein Befehl pro Zeile** + Enter (siehe unten) |
+| `Cursor origin: your access token was not accepted` | PC ist **nicht** bei Cursor Origin eingeloggt | **Cursor-Clone auf Windows überspringen** — siehe „Ohne Cursor-Clone“ |
 
-## Empfohlen: Code von Cursor klonen, dann zu GitHub pushen
+---
 
-Der vollständige Stand liegt noch auf **Cursor Origin** (bis er auf GitHub ist).
+## Empfohlen: Ohne Cursor-Clone (nur GitHub + Cloud Agent)
 
-### Wichtig: nicht alles in eine Zeile
+Du willst **nicht** lokal entwickeln. Dann brauchst du auf dem PC **keinen** erfolgreichen Cursor-`git clone`.
 
-In **cmd.exe** jeden Befehl **einzeln** ausführen (nach jeder Zeile **Enter**).  
-Wenn alles zusammengeklebt wird (`Documentsgit clone…`), kommt: *Die Syntax für den Dateinamen … ist falsch.*
+1. In **Cursor** (Projekt / Cloud Agent): Secret **`GH_TOKEN`** = GitHub Personal Access Token (Fine-grained, Repository **openrailworks**, Contents read/write).
+2. Dem Agenten schreiben: **„Pushe main, develop, release und Tags zu GitHub.“**
+3. Auf GitHub: **Settings → Default branch → `develop`**.
 
-### 1. Ordner wählen und klonen
+Fertig — weitere Arbeit nur noch per **Cloud Agent** auf `Gegels/openrailworks`.
 
-**Eingabeaufforderung** — nacheinander:
+---
+
+## Optional: Windows nur für den ersten Push (ohne Cursor-URL)
+
+Wenn der Agent noch nicht pushen kann, aber du **einmalig** von Windows aus liefern willst:
+
+**Quelle darf nicht `origin.cursor.com` sein**, wenn `origin auth login` auf dem PC fehlt.
+
+Stattdessen nach dem ersten erfolgreichen GitHub-Push:
+
+```cmd
+cd /d %USERPROFILE%\Documents
+git clone https://github.com/Gegels/openrailworks.git
+```
+
+(Danach ist GitHub voll — du brauchst den Clone nur, wenn du wirklich lokal pushen willst.)
+
+---
+
+## Falls du Cursor-Clone auf Windows doch nutzen willst
+
+Zuerst Cursor CLI / Origin anmelden (nur wenn installiert):
+
+```cmd
+origin auth login
+```
+
+Dann **ein Befehl pro Zeile**:
 
 ```cmd
 cd /d %USERPROFILE%\Documents
@@ -30,10 +61,6 @@ git clone https://origin.cursor.com/git/georg-suchanek/tmp-c084d2fe9d243296.git 
 cd openrailworks
 ```
 
-Beim Klonen kann nach **Cursor-/Git-Anmeldung** gefragt werden (Browser oder Token).
-
-### 2. GitHub als Ziel eintragen und pushen
-
 ```cmd
 git remote add github https://github.com/Gegels/openrailworks.git
 ```
@@ -42,42 +69,23 @@ git remote add github https://github.com/Gegels/openrailworks.git
 git push -u github main develop release --tags
 ```
 
-GitHub fragt nach Login (Browser, **gh auth login**, oder Personal Access Token als Passwort bei HTTPS).
-
-### 3. Prüfen
-
-Im Browser: https://github.com/Gegels/openrailworks — dort sollten `README.md`, `crates/`, `docs/`, Tag `v0.0.1` sichtbar sein.
+Oder im Projektordner: `scripts\windows-push-github.bat` (nur wenn Clone schon existiert).
 
 ---
 
-## Alternative: Projekt bereits in Cursor auf dem PC
+## GitHub-Login beim Push
 
-Wenn du den Agent-Ordner lokal hast:
+Bei `git push` zu `github.com`:
 
-```cmd
-cd PFAD\ZUM\openrailworks
-git status
-git remote -v
-git push -u https://github.com/Gegels/openrailworks.git main --tags
-```
+- Browser-Anmeldung, oder  
+- **Personal Access Token** als Passwort (Benutzername = dein GitHub-Name)
 
-`PFAD\ZUM\openrailworks` durch den echten Workspace-Pfad ersetzen (in Cursor: Explorer → Ordnerpfad).
+Classic PAT: Scope `repo`. Fine-grained: nur Repo **Gegels/openrailworks**, Contents read/write.
 
 ---
 
-## Nur leeres GitHub-Repo geklont?
+## Danach
 
-`git clone https://github.com/Gegels/openrailworks.git` liefert **noch keinen** OpenRailWorks-Code (Repo war leer). Zuerst Cursor-Repo klonen (Schritt 1 oben) oder Inhalt aus einem Cursor-Export übernehmen.
+https://github.com/Gegels/openrailworks — Branches `develop`, `release`, `main`, Tag `v0.0.1`.
 
----
-
-## GitHub CLI (optional)
-
-```powershell
-winget install GitHub.cli
-gh auth login
-cd %USERPROFILE%\Documents\openrailworks
-gh repo sync
-```
-
-Nach dem ersten manuellen Push reicht für künftige Agenten: **Cloud-Agent von `Gegels/openrailworks` starten**.
+Workflow: [GIT_WORKFLOW.md](GIT_WORKFLOW.md)
