@@ -1,0 +1,12 @@
+[package]
+name = "orw-engine"
+description = "OpenRailWorks simulation and graphics engine (early scaffolding)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+orw-core = { path = "../orw-core" }
+thiserror.workspace = true
+wgpu = "24.0"

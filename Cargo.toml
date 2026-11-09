@@ -1,0 +1,23 @@
+[workspace]
+resolver = "2"
+members = ["crates/orw-core", "crates/orw-catalog-cli", "crates/orw-engine"]
+default-members = ["crates/orw-catalog-cli"]
+
+[workspace.package]
+version = "0.0.1"
+edition = "2021"
+license = "AGPL-3.0-only"
+rust-version = "1.75"
+repository = ""
+homepage = ""
+
+[workspace.dependencies]
+anyhow = "1.0"
+clap = { version = "4.5", features = ["derive", "env"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0"
+toml = "0.8"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+walkdir = "2.5"

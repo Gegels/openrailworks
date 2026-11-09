@@ -1,0 +1,5 @@
+# Copy to:
+#   Linux/macOS: ~/.config/openrailworks/config.toml
+#   Windows:     %APPDATA%\openrailworks\config.toml
+
+railworks_path = "C:/Program Files (x86)/Steam/steamapps/common/RailWorks"

@@ -1,0 +1,54 @@
+name: Bug report
+description: Route, performance, or compatibility issue
+title: "[bug]: "
+labels: ["bug"]
+body:
+  - type: input
+    id: orw-version
+    attributes:
+      label: OpenRailWorks version
+      placeholder: e.g. v0.0.1 or git SHA
+    validations:
+      required: true
+  - type: input
+    id: tsc-version
+    attributes:
+      label: Train Simulator Classic build
+      placeholder: Steam build / forum build
+  - type: input
+    id: route
+    attributes:
+      label: Route folder name
+      placeholder: e.g. Ringbahn Berlin
+    validations:
+      required: true
+  - type: input
+    id: scenario
+    attributes:
+      label: Scenario (if any)
+  - type: dropdown
+    id: platform
+    attributes:
+      label: OS
+      options:
+        - Windows
+        - Linux
+        - macOS
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Paste relevant output; do not attach copyrighted DLC files.
+  - type: checkboxes
+    id: original
+    attributes:
+      label: Comparison
+      options:
+        - label: Reproduces in original Train Simulator Classic
+        - label: Only in OpenRailWorks

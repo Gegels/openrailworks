@@ -1,0 +1,19 @@
+[package]
+name = "orw-catalog"
+description = "CLI: list Train Simulator Classic routes from a local installation (read-only)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "orw-catalog"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+orw-core = { path = "../orw-core" }
+serde_json.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
