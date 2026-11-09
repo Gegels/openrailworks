@@ -49,7 +49,16 @@ cargo build --release -p orw-catalog
 cargo run -p orw-catalog -- doctor --railworks-path /path/to/RailWorks
 ```
 
-## Git
+## Git branches (required)
+
+| Branch | Use |
+|--------|-----|
+| **`develop`** | **All work here.** Commits and pushes from Cloud Agent go to `develop`. |
+| **`release`** | **Never push directly** unless user asked to promote. Use PR `develop` → `release` after user approval. |
+
+Read [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md). Default checkout: `develop`.
+
+## Git remotes
 
 - Push to GitHub: `./scripts/push-github.sh` (needs `GH_TOKEN` or SSH deploy key).
 - User's TSC install is **not** on the cloud VM — use fixture dirs in tests.

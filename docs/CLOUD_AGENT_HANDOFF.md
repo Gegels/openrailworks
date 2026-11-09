@@ -83,13 +83,18 @@ Ergebnisse (FPS, Frametimes) für Ringbahn/Südast in Issues oder `docs/COMPAT_M
 
 ---
 
-## Git / Cloud Agent
+## Git / Cloud Agent (ohne lokales Repo)
 
-- **Primary remote:** `origin` → GitHub `Gegels/openrailworks`.
-- Push: `./scripts/push-github.sh` (braucht `GH_TOKEN` oder Deploy Key auf GitHub).
-- `.cursor/environment.json`: Rust-Toolchain für Agent-Builds.
+| Branch | Bedeutung |
+|--------|-----------|
+| **`develop`** | Default — hier arbeitet der Agent |
+| **`release`** | Nur nach deiner Freigabe (PR von `develop`) |
 
-Wenn der Agent aus **GitHub** gestartet wird, hat er den Code aus dem Repo — **nach dem ersten Push** von `main` inkl. `AGENTS.md` und dieser Datei.
+Details: [GIT_WORKFLOW.md](GIT_WORKFLOW.md).
+
+- GitHub: https://github.com/Gegels/openrailworks
+- Agent **immer** von GitHub starten, Default Branch = **`develop`** (in GitHub Settings).
+- Erster Push einmalig (siehe WINDOWS_FIRST_PUSH.md), danach nur Agent + GitHub UI.
 
 ---
 

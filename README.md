@@ -18,7 +18,9 @@ Early development. Today you get:
 
 Driving, rendering Berlin, or full Lua compatibility is **not** in this release yet. See [docs/ROADMAP.md](docs/ROADMAP.md).
 
-Neuer **Cloud-Agent**? Lies [AGENTS.md](AGENTS.md) und [docs/CLOUD_AGENT_HANDOFF.md](docs/CLOUD_AGENT_HANDOFF.md) (inkl. Copy-Paste-Prompt).
+Neuer **Cloud-Agent**? Lies [AGENTS.md](AGENTS.md), Branch-Modell [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md), [docs/CLOUD_AGENT_HANDOFF.md](docs/CLOUD_AGENT_HANDOFF.md).
+
+**Branches:** `develop` = Entwicklung · `release` = freigegeben (PR von dir).
 
 ## Quick start
 

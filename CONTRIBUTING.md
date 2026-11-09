@@ -32,10 +32,11 @@ Use the bug template and include:
 - TSC build
 - Steps, logs, and whether the problem reproduces in **original TSC**
 
-## Beta vs stable
+## Branches
 
-- `main` should stay buildable.
-- Experimental work can target GitHub **Pre-releases** once CI uploads artifacts.
+- **`develop`** — all changes land here first.
+- **`release`** — only via approved promotion PR from `develop` (see [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md)).
+- Tags `v*` on `release` trigger GitHub Release artifacts.
 
 ## License
 
