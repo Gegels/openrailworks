@@ -18,6 +18,8 @@ Early development. Today you get:
 
 Driving, rendering Berlin, or full Lua compatibility is **not** in this release yet. See [docs/ROADMAP.md](docs/ROADMAP.md).
 
+Neuer **Cloud-Agent**? Lies [AGENTS.md](AGENTS.md) und [docs/CLOUD_AGENT_HANDOFF.md](docs/CLOUD_AGENT_HANDOFF.md) (inkl. Copy-Paste-Prompt).
+
 ## Quick start
 
 ```bash
