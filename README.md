@@ -1,6 +1,8 @@
 # OpenRailWorks
 
-**GitHub monorepo** — all crates and docs in one repository ([layout](docs/MONOREPO.md), [GitHub setup](docs/GITHUB.md)).
+[![CI](https://github.com/Gegels/openrailworks/actions/workflows/ci.yml/badge.svg)](https://github.com/Gegels/openrailworks/actions/workflows/ci.yml)
+
+**GitHub monorepo:** [github.com/Gegels/openrailworks](https://github.com/Gegels/openrailworks) — all crates and docs in one repo ([layout](docs/MONOREPO.md), [GitHub setup](docs/GITHUB.md)).
 
 Independent, open-source reimplementation of the **Train Simulator Classic** (RailWorks) runtime — inspired by [openOMSI](https://openomsi.org/). Your purchased routes, rolling stock, and scenarios stay on disk in the original installation; **this project ships no game content**.
 

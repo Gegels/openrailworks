@@ -2,7 +2,7 @@
 # Creates github.com/<owner>/openrailworks and pushes this monorepo.
 set -euo pipefail
 
-OWNER="${GITHUB_OWNER:-suchanek}"
+OWNER="${GITHUB_OWNER:-Gegels}"
 REPO_NAME="${GITHUB_REPO:-openrailworks}"
 VISIBILITY="${GITHUB_VISIBILITY:-private}"
 

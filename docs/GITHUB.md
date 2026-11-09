@@ -2,9 +2,9 @@
 
 Recommended canonical repository:
 
-**https://github.com/suchanek/openrailworks** (private or public — your choice)
+**https://github.com/Gegels/openrailworks** (public monorepo)
 
-> If your GitHub username differs, replace `suchanek` in URLs and scripts.
+> Canonical GitHub org/user: `Gegels`.
 
 ## Create the repository (once)
 
@@ -32,7 +32,7 @@ git push -u github main --tags
 2. Run:
 
 ```bash
-git remote add github https://github.com/suchanek/openrailworks.git
+git remote add github https://github.com/Gegels/openrailworks.git
 git push -u github main --tags
 ```
 
@@ -46,7 +46,7 @@ git push -u github main --tags
 ```bash
 git remote -v
 origin   https://origin.cursor.com/georg-suchanek/....git
-github   https://github.com/suchanek/openrailworks.git
+github   https://github.com/Gegels/openrailworks.git
 ```
 
 ## Cloud agent + `GH_TOKEN`
