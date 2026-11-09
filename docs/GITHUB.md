@@ -63,3 +63,19 @@ Hosted agents do not have `gh login` by default. To let the agent create or push
 - **Release** — tag `v*` triggers artifact upload via `softprops/action-gh-release`.
 
 Workflows run on **GitHub** when the default remote is GitHub.
+
+## Push vom Cloud-Agenten (Deploy Key oder PAT)
+
+Der Agent kann nicht mit deinem GitHub-Passwort pushen. Zwei Wege:
+
+1. **`GH_TOKEN`** — Fine-grained PAT (Contents: Read/Write) als Projekt-Secret `GH_TOKEN`, dann `./scripts/push-github.sh`.
+2. **Deploy Key** — Unter [Repository → Settings → Deploy keys](https://github.com/Gegels/openrailworks/settings/keys) den öffentlichen Schlüssel aus `.deploy/github_deploy.pub` (im Agent-Workspace) mit **Allow write access** hinzufügen. Danach im Chat kurz „Deploy Key ist drin“ schreiben; der Agent pusht per SSH.
+
+## Push von deinem PC (ohne Secret)
+
+```bash
+git remote add github https://github.com/Gegels/openrailworks.git
+git push -u github main --tags
+```
+
+(Lokales Clone mit SSH/HTTPS + GitHub-Anmeldung.)
