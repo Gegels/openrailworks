@@ -14,7 +14,11 @@
 
 Du willst **nicht** lokal entwickeln. Dann brauchst du auf dem PC **keinen** erfolgreichen Cursor-`git clone`.
 
-1. In **Cursor** (Projekt / Cloud Agent): Secret **`GH_TOKEN`** = GitHub Personal Access Token (Fine-grained, Repository **openrailworks**, Contents read/write).
+**Am einfachsten:** einmal [Deploy Key](DEPLOY_KEY_EINMAL.md) auf GitHub hinterlegen → Agent schreibt: „Pushe zu GitHub.“
+
+Alternativ (wenn Cursor **Environment-Secret** `GH_TOKEN` für Cloud Agents gesetzt ist und ein neuer Agent-Lauf läuft):
+
+1. Secret **`GH_TOKEN`** im **Agent-Environment** (nicht nur App-Secret).
 2. Dem Agenten schreiben: **„Pushe main, develop, release und Tags zu GitHub.“**
 3. Auf GitHub: **Settings → Default branch → `develop`**.
 
