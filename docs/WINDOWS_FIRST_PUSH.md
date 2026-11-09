@@ -9,13 +9,24 @@
 
 Der vollständige Stand liegt noch auf **Cursor Origin** (bis er auf GitHub ist).
 
+### Wichtig: nicht alles in eine Zeile
+
+In **cmd.exe** jeden Befehl **einzeln** ausführen (nach jeder Zeile **Enter**).  
+Wenn alles zusammengeklebt wird (`Documentsgit clone…`), kommt: *Die Syntax für den Dateinamen … ist falsch.*
+
 ### 1. Ordner wählen und klonen
 
-**Eingabeaufforderung** oder **PowerShell**:
+**Eingabeaufforderung** — nacheinander:
 
 ```cmd
-cd %USERPROFILE%\Documents
+cd /d %USERPROFILE%\Documents
+```
+
+```cmd
 git clone https://origin.cursor.com/git/georg-suchanek/tmp-c084d2fe9d243296.git openrailworks
+```
+
+```cmd
 cd openrailworks
 ```
 
@@ -25,7 +36,10 @@ Beim Klonen kann nach **Cursor-/Git-Anmeldung** gefragt werden (Browser oder Tok
 
 ```cmd
 git remote add github https://github.com/Gegels/openrailworks.git
-git push -u github main --tags
+```
+
+```cmd
+git push -u github main develop release --tags
 ```
 
 GitHub fragt nach Login (Browser, **gh auth login**, oder Personal Access Token als Passwort bei HTTPS).
