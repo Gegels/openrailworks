@@ -14,10 +14,11 @@ Read this file at the start of every Cloud Agent run on this repository.
 
 | Done (v0.0.1) | Next (Phase 1) |
 |---------------|----------------|
-| `orw-core` install + route catalog | `orw-vfs`: read-only `.ap` + loose files |
-| CLI `orw-catalog` | `Tracks.bin` / blueprint parsers (stubs → real) |
-| `orw-engine` + wgpu dep, SLO 60@1080p | wgpu window or headless CI smoke |
-| CI matrix Win/Linux/macOS | First route **display** (no driving yet) |
+| `orw-core` install + route catalog | `Tracks.bin` parser (probe only so far) |
+| `orw-vfs` loose + `.ap` (ZIP) | wgpu window or headless CI smoke |
+| `orw-launcher` GUI + CLI | First route **display** (no driving yet) |
+| `orw-engine` LaunchSession + SLO | Lua host minimal |
+| CLI `orw-catalog` | CI matrix Win/Linux/macOS |
 
 Full roadmap: [docs/ROADMAP.md](docs/ROADMAP.md).
 

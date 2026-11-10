@@ -1,5 +1,14 @@
-# Copy to:
-#   Linux/macOS: ~/.config/openrailworks/config.toml
-#   Windows:     %APPDATA%\openrailworks\config.toml
+# OpenRailWorks user config (launcher + CLI)
+# Linux/macOS: ~/.config/openrailworks/config.toml
+# Windows:     %APPDATA%\openrailworks\config.toml
 
-railworks_path = "C:/Program Files (x86)/Steam/steamapps/common/RailWorks"
+railworks_path = "/path/to/Steam/steamapps/common/RailWorks"
+
+update_channel = "stable"   # stable | beta
+graphics_profile = "vanilla" # vanilla | enhanced
+
+target_fps = 60
+display_width = 1920
+display_height = 1080
+
+favorite_routes = ["YourRouteId"]

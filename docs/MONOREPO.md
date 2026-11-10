@@ -8,7 +8,9 @@ openrailworks/                 # repository root (= this monorepo)
 ├── crates/
 │   ├── orw-core/              # install path, route catalog (library)
 │   ├── orw-catalog-cli/       # `orw-catalog` binary
-│   └── orw-engine/            # simulation / wgpu (library)
+│   ├── orw-engine/            # simulation / wgpu (library)
+│   ├── orw-vfs/               # read-only `.ap` + loose files
+│   └── orw-launcher/          # `orw-launcher` GUI + CLI
 ├── docs/                      # roadmap, benchmarks, legal, formats
 ├── scripts/                   # build + GitHub bootstrap
 └── .github/                   # CI, issue templates
@@ -22,6 +24,7 @@ openrailworks/                 # repository root (= this monorepo)
 | Test all | `cargo test --workspace` |
 | CLI only | `cargo build --release -p orw-catalog` |
 | Run catalog | `cargo run -p orw-catalog -- doctor` |
+| Run launcher | `cargo run -p orw-launcher` |
 
 ## Adding a crate
 
@@ -29,7 +32,7 @@ openrailworks/                 # repository root (= this monorepo)
 2. Add the member to root `Cargo.toml` `[workspace.members]`
 3. Extend CI if new artifacts should be uploaded
 
-Future crates (not yet present): `orw-vfs`, `orw-lua`, `orw-launcher`, `orw-render`.
+Future crates (not yet present): `orw-lua`, `orw-render`.
 
 ## GitHub
 

@@ -8,5 +8,6 @@ rust-version.workspace = true
 
 [dependencies]
 orw-core = { path = "../orw-core" }
+serde.workspace = true
 thiserror.workspace = true
 wgpu = "24.0"

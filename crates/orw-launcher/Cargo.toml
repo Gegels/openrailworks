@@ -1,0 +1,24 @@
+[package]
+name = "orw-launcher"
+description = "OpenRailWorks launcher — route picker, settings, engine start (OpenOMSI-style)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "orw-launcher"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+eframe = { version = "0.29", default-features = true, features = ["wgpu"] }
+egui = "0.29"
+orw-core = { path = "../orw-core" }
+orw-engine = { path = "../orw-engine" }
+orw-vfs = { path = "../orw-vfs" }
+rfd = "0.15"
+serde_json.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true

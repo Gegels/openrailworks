@@ -45,6 +45,20 @@ jobs:
           name: orw-catalog-${{ matrix.os }}
           path: target/release/orw-catalog.exe
 
+      - name: Upload orw-launcher (Unix)
+        if: matrix.os != 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: orw-launcher-${{ matrix.os }}
+          path: target/release/orw-launcher
+
+      - name: Upload orw-launcher (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: orw-launcher-${{ matrix.os }}
+          path: target/release/orw-launcher.exe
+
   # Create tags v* on branch `release` after promoting develop → release.
   release:
     name: Release assets
