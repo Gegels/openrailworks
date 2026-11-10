@@ -14,15 +14,27 @@ orw-launcher ap-count
 
 Windows: `target\release\orw-launcher.exe`
 
-## Pages
+## Pages (openOMSI-style)
 
 | Page | Purpose |
 |------|---------|
 | **Start** | Installation status, route count, benchmark hints |
 | **Strecken** | Search, favourites, route selection |
 | **Fahren** | Free Roam / scenario (stub), **Start** → engine session |
-| **Einstellungen** | `railworks_path`, Stable/Beta channel, Vanilla graphics, resolution, FPS |
+| **Grafik / Kamera / Anzeige / Allgemein** | Settings tabs; changes apply **live** to the GameCam panel |
 | **Über** | Version, GitHub link |
+
+### GameCam preview (right panel)
+
+On **Start**, **Fahren**, and all graphics-related settings pages, the launcher shows a **wgpu preview** that mirrors in-game camera/lighting:
+
+- **Grafikmodus** — Vanilla / Vanilla+ / Enhanced (lighting and shadows)
+- **Tageszeit** — sky gradient and fog
+- **Sichtweite** — distance fog
+- **Kamera** — FOV, Führerstand / Chase / Oben, orbit with mouse drag
+- **Anzeige** — aspect ratio from resolution, render scale shrinks the preview viewport
+
+Settings are written to `config.toml` as you change sliders (no separate save required).
 
 Configuration is stored in `~/.config/openrailworks/config.toml` (see [config.example.toml](config.example.toml)).
 

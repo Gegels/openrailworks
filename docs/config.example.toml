@@ -1,14 +1,29 @@
-# OpenRailWorks user config (launcher + CLI)
-# Linux/macOS: ~/.config/openrailworks/config.toml
-# Windows:     %APPDATA%\openrailworks\config.toml
-
 railworks_path = "/path/to/Steam/steamapps/common/RailWorks"
 
-update_channel = "stable"   # stable | beta
-graphics_profile = "vanilla" # vanilla | enhanced
+update_channel = "stable"
+graphics_profile = "vanilla_plus"
 
 target_fps = 60
 display_width = 1920
 display_height = 1080
 
 favorite_routes = ["YourRouteId"]
+
+[camera]
+fov_vertical_deg = 72.0
+mode = "cab"
+orbit_yaw_deg = 0.0
+orbit_pitch_deg = -12.0
+chase_distance_m = 18.0
+
+[graphics]
+msaa_samples = 4
+shadows = true
+view_distance_m = 2500.0
+render_scale = 1.0
+time_of_day_hours = 14.0
+vsync = true
+
+[display]
+fullscreen = false
+ui_opacity = 0.85

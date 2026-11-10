@@ -15,6 +15,9 @@ anyhow.workspace = true
 clap.workspace = true
 eframe = { version = "0.29", default-features = true, features = ["wgpu"] }
 egui = "0.29"
+egui-wgpu = "0.29"
+bytemuck = { version = "1", features = ["derive"] }
+glam = "0.29"
 orw-core = { path = "../orw-core" }
 orw-engine = { path = "../orw-engine" }
 orw-vfs = { path = "../orw-vfs" }

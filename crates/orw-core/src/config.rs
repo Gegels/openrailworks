@@ -4,6 +4,8 @@ use std::path::{Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
 
+use crate::settings::{CameraSettings, DisplaySettings, GraphicsSettings};
+
 const ENV_RAILWORKS_PATH: &str = "RAILWORKS_PATH";
 const ENV_OPENRAILWORKS_CONFIG: &str = "OPENRAILWORKS_CONFIG";
 
@@ -16,10 +18,11 @@ pub enum UpdateChannel {
 }
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum GraphicsProfile {
     #[default]
     Vanilla,
+    VanillaPlus,
     Enhanced,
 }
 
@@ -40,6 +43,12 @@ pub struct UserConfig {
     pub display_height: u32,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub favorite_routes: Vec<String>,
+    #[serde(default)]
+    pub camera: CameraSettings,
+    #[serde(default)]
+    pub graphics: GraphicsSettings,
+    #[serde(default)]
+    pub display: DisplaySettings,
 }
 
 fn default_target_fps() -> u32 {
@@ -64,6 +73,9 @@ impl Default for UserConfig {
             display_width: default_width(),
             display_height: default_height(),
             favorite_routes: Vec::new(),
+            camera: CameraSettings::default(),
+            graphics: GraphicsSettings::default(),
+            display: DisplaySettings::default(),
         }
     }
 }

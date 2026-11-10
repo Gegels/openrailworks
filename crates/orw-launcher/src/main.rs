@@ -1,5 +1,6 @@
 mod app;
 mod cli;
+mod preview;
 
 use clap::Parser;
 use cli::Cli;
@@ -31,6 +32,10 @@ fn main() -> anyhow::Result<()> {
         native_options,
         Box::new(|cc| {
             cc.egui_ctx.set_visuals(egui::Visuals::dark());
+            if let Some(rs) = cc.wgpu_render_state.as_ref() {
+                let gpu = preview::GameCamGpu::new(&rs.device, rs.target_format);
+                rs.renderer.write().callback_resources.insert(gpu);
+            }
             Ok(Box::new(app::LauncherApp::new(cc)))
         }),
     )
