@@ -32,10 +32,14 @@ cargo build --release -p orw-launcher
 
 # or diagnostics-only CLI:
 cargo build --release -p orw-catalog
+```
 
+**Windows Desktop:** nach dem Build `scripts\install-launcher-desktop.cmd` — legt eine Verknüpfung **OpenRailWorks** auf den Desktop. Details: [docs/LAUNCHER_DESKTOP_WINDOWS.md](docs/LAUNCHER_DESKTOP_WINDOWS.md).
+
+```cmd
 # Windows example
 set RAILWORKS_PATH=C:\Program Files (x86)\Steam\steamapps\common\RailWorks
-orw-launcher
+target\release\orw-launcher.exe
 # or: orw-catalog doctor
 orw-catalog routes
 orw-catalog benchmarks
