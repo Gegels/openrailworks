@@ -18,6 +18,8 @@ OpenRailWorks hat **keine Excel-Oberfläche**, sondern ein natives **Desktop-Pro
    ```
 4. Auf dem Desktop **„OpenRailWorks“** doppelklicken → Fenster mit linker Navigation und **GameCam-Vorschau** rechts.
 
+**OneDrive-Desktop:** Der Installer ermittelt den echten Desktop-Ordner automatisch (nicht nur `C:\Users\…\Desktop`). Wenn die Verknüpfung fehlschlägt: `target\release\orw-launcher.exe` per Rechtsklick → Verknüpfung erstellen.
+
 ## Manuell ohne Skript
 
 ```cmd

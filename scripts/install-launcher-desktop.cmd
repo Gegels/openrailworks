@@ -22,15 +22,9 @@ if not exist "%EXE%" (
     exit /b 1
 )
 
-set "DESKTOP=%USERPROFILE%\Desktop"
-set "LINK=%DESKTOP%\OpenRailWorks.lnk"
-
-powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-  "$s = (New-Object -ComObject WScript.Shell).CreateShortcut('%LINK%');" ^
-  "$s.TargetPath = '%EXE%';" ^
-  "$s.WorkingDirectory = '%CD%';" ^
-  "$s.Description = 'OpenRailWorks Launcher';" ^
-  "$s.Save()"
+set "PS1=%~dp0install-launcher-shortcut.ps1"
+set "LINK="
+for /f "delims=" %%L in ('powershell -NoProfile -ExecutionPolicy Bypass -File "%PS1%" -ExePath "%EXE%" -WorkingDirectory "%CD%"') do set "LINK=%%L"
 
 if errorlevel 1 (
     echo [Warnung] Verknuepfung konnte nicht erstellt werden. Starte direkt:
@@ -41,7 +35,7 @@ if errorlevel 1 (
 echo.
 echo Fertig.
 echo   Programm:  %EXE%
-echo   Desktop:   %LINK%
+echo   Verknuepfung: %LINK%
 echo.
 echo Doppelklick auf "OpenRailWorks" auf dem Desktop oeffnet die GUI.
 echo RailWorks-Pfad: im Launcher unter Einstellungen -^> Allgemein.
