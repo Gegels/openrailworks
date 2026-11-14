@@ -13,6 +13,8 @@ serde_json.workspace = true
 thiserror.workspace = true
 toml.workspace = true
 walkdir.workspace = true
+quick-xml = { version = "0.37", features = ["serialize"] }
+zip.workspace = true
 
 [dev-dependencies]
 tempfile = "3.14"

@@ -3,7 +3,8 @@
 | Phase | Focus | Success |
 |-------|--------|---------|
 | **0** | Baseline vs TSC on Ringbahn + Südast | Frametime notes in [BENCHMARKS.md](BENCHMARKS.md) |
-| **0.0.1** (now) | Install discovery, route catalog CLI, CI | `orw-catalog` + docs |
+| **0.0.1** | Install discovery, catalog CLI, CI | `orw-catalog` + docs |
+| **0.1** (now) | VFS, launcher, session model | `orw-launcher` + `orw-vfs` on `develop` |
 | **1** | First drivable slice: one route, Free Roam, minimal Lua | 60 FPS @ 1080p Vanilla SLO on reference hardware |
 | **2** | All routes in **your** install: load + Free Roam + SLO | [COMPAT_MATRIX.md](COMPAT_MATRIX.md) 100 % owned routes |
 | **3** | Workshop / third-party packs from issues | Matrix grows with community |

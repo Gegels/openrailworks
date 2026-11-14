@@ -1,0 +1,18 @@
+[package]
+name = "orw-vfs"
+description = "Read-only virtual filesystem for Train Simulator Classic (.ap + loose files)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+orw-core = { path = "../orw-core" }
+serde.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+walkdir.workspace = true
+zip.workspace = true
+
+[dev-dependencies]
+tempfile = "3.14"

@@ -12,8 +12,10 @@ Independent, open-source reimplementation of the **Train Simulator Classic** (Ra
 
 Early development. Today you get:
 
+- **`orw-launcher`** — OpenOMSI-style desktop UI (Strecken, Fahren, Einstellungen) plus CLI (`doctor`, `routes`, `ap-count`). See [docs/LAUNCHER.md](docs/LAUNCHER.md).
 - **`orw-catalog`** — read-only scan of `Content/Routes`, `.ap` package counts, benchmark route hints (Ringbahn Berlin, Südast).
-- **`orw-engine`** — shared performance SLO defaults (60 FPS @ 1080p Vanilla) and wgpu dependency for upcoming rendering work.
+- **`orw-vfs`** — unified read path for loose files and `.ap` (ZIP) archives under your installation.
+- **`orw-engine`** — `LaunchSession` model, performance SLO (60 FPS @ 1080p Vanilla), wgpu dependency; interactive runtime next.
 - Cross-platform **Rust** workspace (Windows, Linux, macOS) with CI builds.
 
 Driving, rendering Berlin, or full Lua compatibility is **not** in this release yet. See [docs/ROADMAP.md](docs/ROADMAP.md).
@@ -26,11 +28,19 @@ Neuer **Cloud-Agent**? Lies [AGENTS.md](AGENTS.md), Branch-Modell [docs/GIT_WORK
 
 ```bash
 # Build (needs Rust stable — see rust-toolchain.toml)
-cargo build --release -p orw-catalog
+cargo build --release -p orw-launcher
 
+# or diagnostics-only CLI:
+cargo build --release -p orw-catalog
+```
+
+**Windows Desktop:** nach dem Build `scripts\install-launcher-desktop.cmd` — legt eine Verknüpfung **OpenRailWorks** auf den Desktop. Details: [docs/LAUNCHER_DESKTOP_WINDOWS.md](docs/LAUNCHER_DESKTOP_WINDOWS.md).
+
+```cmd
 # Windows example
 set RAILWORKS_PATH=C:\Program Files (x86)\Steam\steamapps\common\RailWorks
-orw-catalog doctor
+target\release\orw-launcher.exe
+# or: orw-catalog doctor
 orw-catalog routes
 orw-catalog benchmarks
 

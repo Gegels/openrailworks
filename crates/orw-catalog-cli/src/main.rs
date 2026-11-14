@@ -117,7 +117,12 @@ fn cmd_routes(
             if route.has_route_properties { "props " } else { "" },
             route.scenario_count
         );
-        println!("  {:<40} {}", route.id, flags.trim());
+        if route.display_name != route.id {
+            println!("  {:<48} {}", route.display_name, flags.trim());
+            println!("    {:<46}", route.id);
+        } else {
+            println!("  {:<40} {}", route.id, flags.trim());
+        }
     }
 
     Ok(())

@@ -1,6 +1,12 @@
 [workspace]
 resolver = "2"
-members = ["crates/orw-core", "crates/orw-catalog-cli", "crates/orw-engine"]
+members = [
+    "crates/orw-core",
+    "crates/orw-catalog-cli",
+    "crates/orw-engine",
+    "crates/orw-vfs",
+    "crates/orw-launcher",
+]
 default-members = ["crates/orw-catalog-cli"]
 
 [workspace.package]
@@ -21,3 +27,4 @@ toml = "0.8"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 walkdir = "2.5"
+zip = { version = "2.2", default-features = false, features = ["deflate"] }
