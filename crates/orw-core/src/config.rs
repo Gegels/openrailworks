@@ -1,16 +1,83 @@
 use std::env;
+use std::fs;
 use std::path::{Path, PathBuf};
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
+
+use crate::settings::{CameraSettings, DisplaySettings, GraphicsSettings};
 
 const ENV_RAILWORKS_PATH: &str = "RAILWORKS_PATH";
 const ENV_OPENRAILWORKS_CONFIG: &str = "OPENRAILWORKS_CONFIG";
 
-#[derive(Debug, Clone, Default, Deserialize)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum UpdateChannel {
+    #[default]
+    Stable,
+    Beta,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum GraphicsProfile {
+    #[default]
+    Vanilla,
+    VanillaPlus,
+    Enhanced,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct UserConfig {
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub railworks_path: Option<PathBuf>,
+    #[serde(default)]
+    pub update_channel: UpdateChannel,
+    #[serde(default)]
+    pub graphics_profile: GraphicsProfile,
+    #[serde(default = "default_target_fps")]
+    pub target_fps: u32,
+    #[serde(default = "default_width")]
+    pub display_width: u32,
+    #[serde(default = "default_height")]
+    pub display_height: u32,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub favorite_routes: Vec<String>,
+    #[serde(default)]
+    pub camera: CameraSettings,
+    #[serde(default)]
+    pub graphics: GraphicsSettings,
+    #[serde(default)]
+    pub display: DisplaySettings,
+}
+
+fn default_target_fps() -> u32 {
+    60
+}
+
+fn default_width() -> u32 {
+    1920
+}
+
+fn default_height() -> u32 {
+    1080
+}
+
+impl Default for UserConfig {
+    fn default() -> Self {
+        Self {
+            railworks_path: None,
+            update_channel: UpdateChannel::default(),
+            graphics_profile: GraphicsProfile::default(),
+            target_fps: default_target_fps(),
+            display_width: default_width(),
+            display_height: default_height(),
+            favorite_routes: Vec::new(),
+            camera: CameraSettings::default(),
+            graphics: GraphicsSettings::default(),
+            display: DisplaySettings::default(),
+        }
+    }
 }
 
 impl UserConfig {
@@ -26,6 +93,15 @@ impl UserConfig {
         }
         paths
     }
+
+    pub fn primary_config_path() -> Option<PathBuf> {
+        for path in Self::config_paths() {
+            if path.is_file() {
+                return Some(path);
+            }
+        }
+        home_dir().map(|h| h.join(".config/openrailworks/config.toml"))
+    }
 }
 
 pub fn load_user_config() -> UserConfig {
@@ -40,6 +116,20 @@ pub fn load_user_config() -> UserConfig {
         }
     }
     UserConfig::default()
+}
+
+/// Persist config to the primary path (creates parent directories).
+pub fn save_user_config(cfg: &UserConfig) -> std::io::Result<PathBuf> {
+    let path = UserConfig::primary_config_path().ok_or_else(|| {
+        std::io::Error::new(std::io::ErrorKind::NotFound, "no config path")
+    })?;
+    if let Some(parent) = path.parent() {
+        fs::create_dir_all(parent)?;
+    }
+    let text = toml::to_string_pretty(cfg)
+        .map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidData, e))?;
+    fs::write(&path, text)?;
+    Ok(path)
 }
 
 /// Resolve the user-provided or discovered RailWorks root directory.
