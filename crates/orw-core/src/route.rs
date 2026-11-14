@@ -53,7 +53,8 @@ pub fn scan_routes(
         let tracks = path.join("Tracks.bin");
         let has_tracks_bin = tracks.is_file();
         let route_props = path.join("RouteProperties.xml");
-        let has_route_properties = route_props.is_file();
+        let has_route_properties =
+            route_props.is_file() || path.join("RouteProperties.zml").is_file();
 
         let scenario_dir = path.join("Scenarios");
         let scenario_count = if scenario_dir.is_dir() {
@@ -106,15 +107,33 @@ fn resolve_display_name(
     has_route_properties: bool,
     route_props: &PathBuf,
 ) -> Option<String> {
-    if has_route_properties {
+    if route_props.is_file() {
         if let Some(name) = read_display_name_from_file(route_props) {
             return Some(name);
         }
     }
-    let ap = route_dir.join("MainContent.ap");
-    if ap.is_file() {
-        if let Ok(data) = read_route_properties_from_ap(&ap) {
-            return parse_route_properties_xml(&data);
+    let zml = route_dir.join("RouteProperties.zml");
+    if zml.is_file() {
+        if let Some(name) = read_display_name_from_file(&zml) {
+            return Some(name);
+        }
+    }
+    if has_route_properties {
+        let _ = has_route_properties;
+    }
+    if let Ok(entries) = fs::read_dir(route_dir) {
+        for entry in entries.flatten() {
+            let p = entry.path();
+            if p.is_file()
+                && p.extension()
+                    .is_some_and(|e| e.eq_ignore_ascii_case("ap"))
+            {
+                if let Ok(data) = read_route_properties_from_ap(&p) {
+                    if let Some(name) = parse_route_properties_xml(&data) {
+                        return Some(name);
+                    }
+                }
+            }
         }
     }
     None

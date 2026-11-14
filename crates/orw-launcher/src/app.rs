@@ -329,6 +329,12 @@ impl LauncherApp {
         ui.label(
             "Anzeigename aus RouteProperties.xml (wie im TSC-Menü). Die Ordner-GUID steht darunter.",
         );
+        ui.horizontal(|ui| {
+            if ui.button("Liste aktualisieren").clicked() {
+                self.refresh_installation();
+            }
+            ui.label("Fehlen Namen: siehe docs/ROUTE_DISPLAY_NAMES.md");
+        });
         if let Some(sel) = &self.selected_route {
             if let Some(catalog) = &self.catalog {
                 if let Some(r) = catalog.routes.iter().find(|x| &x.id == sel) {
