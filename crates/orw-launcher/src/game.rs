@@ -61,7 +61,13 @@ pub fn run(session_file: PathBuf) -> anyhow::Result<()> {
                 preview_shared: shared,
                 aspect_store,
                 route_title: title,
-                hint: "Platzhalter-Welt — echte Streckengeometrie folgt. ESC = Menü schließen.".into(),
+                route_id: bundle.session.route_id.clone(),
+                config_summary: format!(
+                    "{:?} · {:.0} h · FOV {:.0}°",
+                    bundle.config.graphics_profile,
+                    bundle.config.graphics.time_of_day_hours,
+                    bundle.config.camera.fov_vertical_deg,
+                ),
             }))
         }),
     )
@@ -73,19 +79,31 @@ struct GameApp {
     preview_shared: PreviewShared,
     aspect_store: Arc<Mutex<f32>>,
     route_title: String,
-    hint: String,
+    route_id: String,
+    config_summary: String,
 }
 
 impl eframe::App for GameApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::TopBottomPanel::top("bar").show(ctx, |ui| {
-            ui.horizontal(|ui| {
-                ui.heading(&self.route_title);
-                ui.separator();
-                ui.label(&self.hint);
-                if ui.button("Beenden").clicked() {
-                    ctx.send_viewport_cmd(egui::ViewportCommand::Close);
-                }
+            ui.vertical(|ui| {
+                ui.horizontal(|ui| {
+                    ui.heading(&self.route_title);
+                    ui.separator();
+                    ui.label(&self.config_summary);
+                    if ui.button("Beenden").clicked() {
+                        ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+                    }
+                });
+                ui.colored_label(
+                    egui::Color32::from_rgb(255, 190, 100),
+                    format!(
+                        "Strecke ist gewählt (Ordner: {}). OpenRailWorks lädt noch keine Gleise aus TSC \
+                         — gleiche Platzhalter-Welt für jede Route. Echte Ringbahn kommt mit dem Strecken-Loader. \
+                         Für echte Fahrt weiter Train Simulator Classic nutzen.",
+                        self.route_id
+                    ),
+                );
             });
         });
         egui::CentralPanel::default().show(ctx, |ui| {

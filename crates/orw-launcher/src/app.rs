@@ -427,6 +427,11 @@ impl LauncherApp {
                 .unwrap_or_else(|| id.clone()),
         };
         ui.label(format!("Strecke: {label}"));
+        ui.colored_label(
+            egui::Color32::from_rgb(255, 190, 100),
+            "„Fahrt starten“ öffnet OpenRailWorks (orw-game), nicht Train Simulator Classic. \
+             Noch keine echten TSC-Gleise — nur Grafik-Einstellungen in der Vorschau.",
+        );
         ui.horizontal(|ui| {
             ui.radio_value(&mut self.drive_mode, DriveMode::FreeRoam, "Free Roam");
             ui.radio_value(&mut self.drive_mode, DriveMode::Scenario, "Szenario (bald)");
