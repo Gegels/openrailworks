@@ -1,8 +1,12 @@
 //! Graphics and simulation engine — Phase 1: session model + wgpu prep; runtime window next.
 
+mod launch;
 mod session;
 
+pub use launch::LaunchBundle;
 pub use session::{DriveMode, LaunchSession};
+
+use std::path::PathBuf;
 
 use thiserror::Error;
 
@@ -38,17 +42,13 @@ impl From<&orw_core::UserConfig> for PerformanceSlo {
 
 #[derive(Debug, Error)]
 pub enum EngineError {
-    #[error("engine runtime not ready (Phase 1 — route display in progress)")]
-    NotReady,
+    #[error("orw-game nicht gefunden (bitte cargo build --release -p orw-launcher): {}", .0.display())]
+    GameBinaryMissing(PathBuf),
     #[error(transparent)]
     Io(#[from] std::io::Error),
 }
 
-/// Accept a launch request from the launcher; returns when a windowed runtime exists.
-pub fn launch_session(session: &LaunchSession) -> Result<(), EngineError> {
-    let _ = session;
-    Err(EngineError::NotReady)
-}
+pub use launch::launch_session;
 
 /// Returns whether the linked wgpu stack can be built on this platform (compile-time smoke).
 pub fn platform_capabilities() -> &'static str {
@@ -58,7 +58,6 @@ pub fn platform_capabilities() -> &'static str {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use orw_core::GraphicsProfile;
 
     #[test]
     fn default_slo_matches_plan() {
@@ -67,9 +66,4 @@ mod tests {
         assert_eq!(slo.width, 1920);
     }
 
-    #[test]
-    fn launch_not_ready_yet() {
-        let session = LaunchSession::free_roam("TestRoute", GraphicsProfile::Vanilla);
-        assert!(matches!(launch_session(&session), Err(EngineError::NotReady)));
-    }
 }

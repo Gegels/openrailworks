@@ -14,6 +14,8 @@ pub enum DriveMode {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LaunchSession {
     pub route_id: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub route_display_name: Option<String>,
     pub mode: DriveMode,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub scenario_id: Option<String>,
@@ -27,6 +29,7 @@ impl LaunchSession {
     pub fn free_roam(route_id: impl Into<String>, graphics: GraphicsProfile) -> Self {
         Self {
             route_id: route_id.into(),
+            route_display_name: None,
             mode: DriveMode::FreeRoam,
             scenario_id: None,
             vehicle_id: None,

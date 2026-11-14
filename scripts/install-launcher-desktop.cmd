@@ -9,7 +9,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-echo Baue OpenRailWorks Launcher ^(GUI, Release^)...
+echo Baue OpenRailWorks Launcher + Spiel-Fenster ^(GUI, Release^)...
 cargo build --release -p orw-launcher
 if errorlevel 1 (
     echo [Fehler] Build fehlgeschlagen.
@@ -35,6 +35,7 @@ if errorlevel 1 (
 echo.
 echo Fertig.
 echo   Programm:  %EXE%
+echo   Spiel:     %CD%\target\release\orw-game.exe
 echo   Verknuepfung: %LINK%
 echo.
 echo Doppelklick auf "OpenRailWorks" auf dem Desktop oeffnet die GUI.

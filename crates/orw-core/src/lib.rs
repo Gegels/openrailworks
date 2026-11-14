@@ -1,6 +1,7 @@
 mod config;
 mod install;
 mod route;
+mod route_properties;
 pub mod settings;
 pub mod tracks;
 
@@ -15,3 +16,4 @@ pub use install::{InstallError, InstallLayout, RailWorksInstall};
 pub use route::{
     catalog_matches_benchmarks, scan_routes, RouteCatalog, RouteEntry, RouteScanOptions,
 };
+pub use route_properties::{parse_route_properties_xml, read_display_name_from_file};

@@ -40,7 +40,9 @@ Configuration is stored in `~/.config/openrailworks/config.toml` (see [config.ex
 
 ## Engine coupling
 
-**Fahrt starten** builds a [`LaunchSession`](../crates/orw-engine/src/session.rs) and calls `orw-engine::launch_session`. Until the wgpu route viewer ships, the launcher shows a clear “engine not ready” message (expected in early Phase 1).
+**Fahrt starten** writes settings + route to a temp JSON and starts **`orw-game.exe`** beside the launcher (same folder as `orw-launcher.exe`). The game window uses your graphics/camera config; route geometry is still a placeholder until Phase 1 route loading ships.
+
+Route titles come from each folder's **`RouteProperties.xml`** (`DisplayName`), or from **`MainContent.ap`** inside the route folder when the XML is packed.
 
 ## Updates (planned)
 

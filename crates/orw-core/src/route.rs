@@ -5,6 +5,7 @@ use serde::Serialize;
 use walkdir::WalkDir;
 
 use crate::install::RailWorksInstall;
+use crate::route_properties::{parse_route_properties_xml, read_display_name_from_file};
 
 #[derive(Debug, Clone, Default)]
 pub struct RouteScanOptions {
@@ -14,7 +15,10 @@ pub struct RouteScanOptions {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct RouteEntry {
+    /// Folder name under `Content/Routes` (often a GUID).
     pub id: String,
+    /// Title from `RouteProperties.xml` / TSC route list (when available).
+    pub display_name: String,
     pub path: PathBuf,
     pub has_tracks_bin: bool,
     pub has_route_properties: bool,
@@ -65,8 +69,12 @@ pub fn scan_routes(
             continue;
         }
 
+        let display_name =
+            resolve_display_name(&path, has_route_properties, &route_props).unwrap_or_else(|| id.clone());
+
         routes.push(RouteEntry {
             id,
+            display_name,
             path,
             has_tracks_bin,
             has_route_properties,
@@ -74,7 +82,11 @@ pub fn scan_routes(
         });
     }
 
-    routes.sort_by(|a, b| a.id.to_lowercase().cmp(&b.id.to_lowercase()));
+    routes.sort_by(|a, b| {
+        a.display_name
+            .to_lowercase()
+            .cmp(&b.display_name.to_lowercase())
+    });
 
     let package_count = install
         .packages_dir
@@ -87,6 +99,51 @@ pub fn scan_routes(
         routes,
         package_count,
     })
+}
+
+fn resolve_display_name(
+    route_dir: &PathBuf,
+    has_route_properties: bool,
+    route_props: &PathBuf,
+) -> Option<String> {
+    if has_route_properties {
+        if let Some(name) = read_display_name_from_file(route_props) {
+            return Some(name);
+        }
+    }
+    let ap = route_dir.join("MainContent.ap");
+    if ap.is_file() {
+        if let Ok(data) = read_route_properties_from_ap(&ap) {
+            return parse_route_properties_xml(&data);
+        }
+    }
+    None
+}
+
+fn read_route_properties_from_ap(ap_path: &PathBuf) -> std::io::Result<Vec<u8>> {
+    use std::fs::File;
+    use std::io::Read;
+    use zip::read::ZipArchive;
+
+    let file = File::open(ap_path)?;
+    let mut archive = ZipArchive::new(file).map_err(|e| {
+        std::io::Error::new(std::io::ErrorKind::InvalidData, e)
+    })?;
+    for i in 0..archive.len() {
+        let mut entry = archive.by_index(i)?;
+        let name = entry.name().replace('\\', "/");
+        if name.eq_ignore_ascii_case("RouteProperties.xml")
+            || name.ends_with("/RouteProperties.xml")
+        {
+            let mut buf = Vec::new();
+            entry.read_to_end(&mut buf)?;
+            return Ok(buf);
+        }
+    }
+    Err(std::io::Error::new(
+        std::io::ErrorKind::NotFound,
+        "RouteProperties.xml not in .ap",
+    ))
 }
 
 fn count_ap_archives(packages_dir: &PathBuf) -> usize {
@@ -122,11 +179,13 @@ pub fn catalog_matches_benchmarks(catalog: &RouteCatalog) -> Vec<String> {
         .iter()
         .filter(|r| {
             let id = r.id.to_lowercase();
-            needles
-                .iter()
-                .any(|n| id.contains(&n.to_lowercase()))
+            let name = r.display_name.to_lowercase();
+            needles.iter().any(|n| {
+                let n = n.to_lowercase();
+                id.contains(&n) || name.contains(&n)
+            })
         })
-        .map(|r| r.id.clone())
+        .map(|r| r.display_name.clone())
         .collect()
 }
 
@@ -143,6 +202,11 @@ mod tests {
         let route_a = root.join("Content/Routes/TestRoute");
         std::fs::create_dir_all(route_a.join("Scenarios/S1")).unwrap();
         std::fs::write(route_a.join("Tracks.bin"), b"\0").unwrap();
+        std::fs::write(
+            route_a.join("RouteProperties.xml"),
+            br#"<DisplayName>My Test Route</DisplayName>"#,
+        )
+        .unwrap();
 
         let install = RailWorksInstall {
             root: root.clone(),
@@ -155,5 +219,6 @@ mod tests {
         assert_eq!(catalog.routes.len(), 1);
         assert!(catalog.routes[0].has_tracks_bin);
         assert_eq!(catalog.routes[0].id, "TestRoute");
+        assert_eq!(catalog.routes[0].display_name, "My Test Route");
     }
 }

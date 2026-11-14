@@ -135,13 +135,23 @@ impl LauncherApp {
             self.page = Page::Routes;
             return;
         };
+        let display = self
+            .catalog
+            .as_ref()
+            .and_then(|c| {
+                c.routes
+                    .iter()
+                    .find(|r| r.id == route_id)
+                    .map(|r| r.display_name.clone())
+            });
         let _ = save_user_config(&self.config);
         let mut session = LaunchSession::free_roam(route_id, self.config.graphics_profile);
+        session.route_display_name = display;
         session.performance = PerformanceSlo::from(&self.config);
         session.mode = self.drive_mode;
         match launch_session(&session) {
-            Ok(()) => self.status = "Lauf gestartet.".into(),
-            Err(e) => self.status = format!("Engine noch nicht bereit ({e}). Vorschau zeigt bereits deine Grafik-Einstellungen."),
+            Ok(()) => self.status = "Spiel-Fenster gestartet — deine Einstellungen sind aktiv. Echte Gleise folgen als Nächstes.".into(),
+            Err(e) => self.status = format!("Start fehlgeschlagen: {e}"),
         }
     }
 
@@ -316,9 +326,27 @@ impl LauncherApp {
 
     fn page_routes(&mut self, ui: &mut egui::Ui) {
         ui.heading("Strecken");
+        ui.label(
+            "Anzeigename aus RouteProperties.xml (wie im TSC-Menü). Die Ordner-GUID steht darunter.",
+        );
+        if let Some(sel) = &self.selected_route {
+            if let Some(catalog) = &self.catalog {
+                if let Some(r) = catalog.routes.iter().find(|x| &x.id == sel) {
+                    ui.colored_label(
+                        egui::Color32::from_rgb(120, 200, 140),
+                        format!("Ausgewählt: {}", r.display_name),
+                    );
+                }
+            }
+        } else {
+            ui.label("Keine Strecke gewählt — Eintrag anklicken oder „Auswählen“.");
+        }
         ui.horizontal(|ui| {
             ui.label("Suche");
             ui.text_edit_singleline(&mut self.route_filter);
+            if ui.button("Zur Fahrt").clicked() {
+                self.page = Page::Drive;
+            }
         });
         let Some(catalog) = self.catalog.clone() else {
             ui.label("Kein Katalog — Installation prüfen.");
@@ -327,29 +355,55 @@ impl LauncherApp {
         let filter = self.route_filter.to_lowercase();
         egui::ScrollArea::vertical().show(ui, |ui| {
             for route in &catalog.routes {
-                if !filter.is_empty() && !route.id.to_lowercase().contains(&filter) {
-                    continue;
+                if !filter.is_empty() {
+                    let id_l = route.id.to_lowercase();
+                    let name_l = route.display_name.to_lowercase();
+                    if !id_l.contains(&filter) && !name_l.contains(&filter) {
+                        continue;
+                    }
                 }
                 let is_sel = self.selected_route.as_deref() == Some(route.id.as_str());
-                let fav = self.config.favorite_routes.contains(&route.id);
-                ui.horizontal(|ui| {
-                    let label = format!(
-                        "{}{}  (Szenarien: {})",
-                        if fav { "★ " } else { "" },
-                        route.id,
-                        route.scenario_count
-                    );
-                    if ui.selectable_label(is_sel, label).clicked() {
-                        self.selected_route = Some(route.id.clone());
-                    }
-                    if ui.small_button(if fav { "☆" } else { "★" }).clicked() {
-                        if fav {
-                            self.config.favorite_routes.retain(|id| id != &route.id);
-                        } else {
-                            self.config.favorite_routes.push(route.id.clone());
-                        }
-                        let _ = save_user_config(&self.config);
-                    }
+                ui.group(|ui| {
+                    let frame = if is_sel {
+                        egui::Frame::group(ui.style()).fill(egui::Color32::from_rgb(40, 70, 55))
+                    } else {
+                        egui::Frame::group(ui.style())
+                    };
+                    frame.show(ui, |ui| {
+                        ui.horizontal(|ui| {
+                            ui.vertical(|ui| {
+                                let fav = self.config.favorite_routes.contains(&route.id);
+                                ui.label(format!(
+                                    "{}{}",
+                                    if fav { "★ " } else { "" },
+                                    route.display_name
+                                ));
+                                ui.small(format!(
+                                    "Ordner: {} · Szenarien: {}",
+                                    route.id, route.scenario_count
+                                ));
+                            });
+                            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                                if ui.button("Auswählen").clicked() {
+                                    self.selected_route = Some(route.id.clone());
+                                }
+                                if ui.small_button(if self.config.favorite_routes.contains(&route.id) {
+                                    "☆"
+                                } else {
+                                    "★"
+                                })
+                                .clicked()
+                                {
+                                    if self.config.favorite_routes.contains(&route.id) {
+                                        self.config.favorite_routes.retain(|id| id != &route.id);
+                                    } else {
+                                        self.config.favorite_routes.push(route.id.clone());
+                                    }
+                                    let _ = save_user_config(&self.config);
+                                }
+                            });
+                        });
+                    });
                 });
             }
         });
@@ -357,11 +411,16 @@ impl LauncherApp {
 
     fn page_drive(&mut self, ui: &mut egui::Ui, ctx: &egui::Context) {
         ui.heading("Fahren");
-        let route = self
-            .selected_route
-            .as_deref()
-            .unwrap_or("(Strecke auf „Strecken“ wählen)");
-        ui.label(format!("Strecke: {route}"));
+        let label = match &self.selected_route {
+            None => "(Strecke unter „Strecken“ wählen)".to_string(),
+            Some(id) => self
+                .catalog
+                .as_ref()
+                .and_then(|c| c.routes.iter().find(|r| &r.id == id))
+                .map(|r| format!("{} ({})", r.display_name, r.id))
+                .unwrap_or_else(|| id.clone()),
+        };
+        ui.label(format!("Strecke: {label}"));
         ui.horizontal(|ui| {
             ui.radio_value(&mut self.drive_mode, DriveMode::FreeRoam, "Free Roam");
             ui.radio_value(&mut self.drive_mode, DriveMode::Scenario, "Szenario (bald)");

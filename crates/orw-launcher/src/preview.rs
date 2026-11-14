@@ -77,6 +77,7 @@ struct GpuUniforms {
     params2: [f32; 4],
 }
 
+#[derive(Clone)]
 pub struct PreviewShared {
     pub config: Arc<Mutex<UserConfig>>,
 }
